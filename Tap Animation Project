@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+
+class TapAnimation extends StatefulWidget {
+  @override
+  _TapAnimationState createState() => _TapAnimationState();
+}
+
+class _TapAnimationState extends State<TapAnimation> with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  bool isOpen = false;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          isOpen = !isOpen;
+          isOpen ? _controller.forward() : _controller.reverse();
+        });
+      },
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          shape: BoxShape.circle,
+        ),
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Container(
+              height: 25,
+              width: 25,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                shape: BoxShape.circle,
+              ),
+            ),
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Container(
+                  height: _controller.value * 25,
+                  width: _controller.value * 25,
+                  decoration: BoxDecoration(
+                    color: Colors.lightBlue,
+                    shape: BoxShape.circle,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
